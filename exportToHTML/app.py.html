@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>app.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+app.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">datetime</span>
+
+<span class="s0">from </span><span class="s1">flask </span><span class="s0">import </span><span class="s1">Flask</span><span class="s0">, </span><span class="s1">render_template</span>
+<span class="s0">from </span><span class="s1">flask_sqlalchemy </span><span class="s0">import </span><span class="s1">SQLAlchemy</span>
+
+<span class="s1">app = Flask(__name__)       </span><span class="s2">#создаем объект на основе класса фласк</span>
+<span class="s1">app.config[</span><span class="s3">'SQLALCHEMY_DATABASE_URI'</span><span class="s1">] = </span><span class="s3">'sqlite:///pythonProject.db' </span><span class="s2">#подключение к базе данных с названием бд ,которую мы создадим</span>
+<span class="s1">db = SQLAlchemy(app)</span>
+
+
+<span class="s0">class </span><span class="s1">Article(db.Model):</span>
+    <span class="s1">id = db.Column(db.Integer</span><span class="s0">, </span><span class="s1">primary_key=</span><span class="s0">True</span><span class="s1">)</span>
+    <span class="s1">title = db.Column(db.String(</span><span class="s4">100</span><span class="s1">)</span><span class="s0">, </span><span class="s1">nullable=</span><span class="s0">False</span><span class="s1">)</span>
+    <span class="s1">intro = db.Column(db.String(</span><span class="s4">300</span><span class="s1">)</span><span class="s0">, </span><span class="s1">nullable=</span><span class="s0">False</span><span class="s1">)</span>
+    <span class="s1">text = db.Column(db.Text</span><span class="s0">, </span><span class="s1">nullable=</span><span class="s0">False</span><span class="s1">)</span>
+    <span class="s1">date = db.Column(db.DateTime</span><span class="s0">, </span><span class="s1">default=datetime.utcnow)</span>
+
+    <span class="s0">def </span><span class="s1">__repr__(self):</span>
+        <span class="s0">return </span><span class="s3">&quot;&lt;Article %r&gt;&quot; </span><span class="s1">% self.id</span>
+
+    <span class="s3">&quot;&quot;&quot;стринг - немного текста, текст - много текста 
+            нулабл фолз - не пустая строка&quot;&quot;&quot;</span>
+
+    <span class="s3">&quot;&quot;&quot;выдается объект и его айди ,для получения записи из бд&quot;&quot;&quot;</span>
+
+
+
+<span class="s1">@app.route(</span><span class="s3">'/'</span><span class="s1">)  </span><span class="s2">#отслеживание главной странички</span>
+<span class="s1">@app.route(</span><span class="s3">'/home'</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">index():</span>
+    <span class="s0">return </span><span class="s1">render_template(</span><span class="s3">'index.html'</span><span class="s1">) </span><span class="s2"># рендер выводит содержимое папки</span>
+
+
+<span class="s1">@app.route(</span><span class="s3">'/about'</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">about():</span>
+    <span class="s0">return </span><span class="s1">render_template(</span><span class="s3">'about.html'</span><span class="s1">)</span>
+
+
+<span class="s1">@app.route(</span><span class="s3">'/user/&lt;string:name&gt;/&lt;int:id&gt;'</span><span class="s1">)</span>
+<span class="s0">def </span><span class="s1">user(name</span><span class="s0">, </span><span class="s1">id):</span>
+    <span class="s0">return </span><span class="s3">&quot;User page: &quot; </span><span class="s1">+ name + </span><span class="s3">&quot; - &quot; </span><span class="s1">+ str(id)</span>
+
+
+<span class="s0">if </span><span class="s1">__name__ == </span><span class="s3">&quot;__main__&quot;</span><span class="s1">:  </span><span class="s2">#запускает локальный сервер</span>
+    <span class="s1">app.run(debug=</span><span class="s0">True</span><span class="s1">) </span><span class="s2">#дебаг выведет все ошибки,как все будет готово,поменяем флаг на FALSE</span>
+</pre>
+</body>
+</html>
